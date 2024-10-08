@@ -1,0 +1,20 @@
+###
+POST http://localhost:3000/api/users
+Content-Type: application/application/json
+
+{
+    "first_name":"peter",
+    "last_name":"mburu",
+    "email":"phantom8526@duck.com",
+    "password":"peter"
+}
+
+### all users
+GET  http://localhost:3000/api/users
+
+
+### one users
+GET http://localhost:3000/api/users/c0768727-7b10-4439-842a-6292543e4fc8
+
+### delete user
+DELETE http://localhost:3000/api/users/c0768727-7b10-4439-842a-6292543e4fc8

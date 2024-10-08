@@ -7,7 +7,7 @@ export const usersTable = pgTable("users", {
     last_name: varchar('last_name', { length: 20 }),
     email: varchar('email', { length: 100 }),
     verified: boolean('verified').default(false),
-    invested: boolean('verified').default(false),
+    invested: boolean('invested').default(false),
     promo_code_owner: varchar('promo_code_owner'),
     created_at: date('created_at').defaultNow(),
 });

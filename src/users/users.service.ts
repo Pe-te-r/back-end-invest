@@ -12,9 +12,14 @@ export const emailExits = async(email: string): Promise<boolean>=>{
     return result.length > 0;
 }
 
-export const getOneUserService = async(email:string)=>{
+export const getOneUserServiceEmail = async(email:string)=>{
     const result = await db.select().from(usersTable).where(eq(usersTable.email, email.toLowerCase()));
     return result[0] ?? null;
+}
+
+export const getOneUserServiceId = async(id: string)=>{
+    const result = await db.select().from(usersTable).where(eq(usersTable.id, id));
+    return result[0]?? null;
 }
 
 export const updateUserService = async(id: string, user: any)=>{
@@ -23,4 +28,16 @@ export const updateUserService = async(id: string, user: any)=>{
       .where(eq(usersTable.id, id));
     
     return result;
+}
+
+export const getAllUserService = async()=>{
+    const result = await db.select().from(usersTable);
+    return result;
+}
+
+export const deleteUserService = async(id: string)=>{
+    const result = await db.delete(usersTable)
+    .where(eq(usersTable.id, id))
+    .returning({'id':usersTable.id}).execute();
+    return result[0] ?? null;
 }
