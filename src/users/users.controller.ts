@@ -1,14 +1,31 @@
 import { Context } from "hono";
 import { deleteUserService, emailExits, getAllUserService,  getOneUserServiceId, registerUserService } from "./users.service";
 
+// Define a sleep function using Promise
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Example usage in an async function
+async function executeTask() {
+  console.log('Task started');
+  
+  // Wait for 5 seconds (5000 milliseconds)
+  await sleep(5000);
+  
+  console.log('Task resumed after 5 seconds');
+}
+
+
+
+
 export const registerUser = async(c: Context)=>{
     try {
         const user = await c.req.json()
         delete user.password;
+        await executeTask();
         const exits =await emailExits(user.email)
         console.log(exits)
         if(exits){
-            return c.json({'mesage':'Email already exists'})
+            return c.json({'message':'Email already exists'})
         }
         const registeredUser = await registerUserService(user)
         return c.json(registeredUser)
