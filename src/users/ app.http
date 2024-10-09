@@ -17,4 +17,4 @@ GET  http://localhost:3000/api/users
 GET http://localhost:3000/api/users/c0768727-7b10-4439-842a-6292543e4fc8
 
 ### delete user
-DELETE http://localhost:3000/api/users/c0768727-7b10-4439-842a-6292543e4fc8
+DELETE http://localhost:3000/api/users/ad7bff7e-882a-4c9e-85d0-a4d5538f2a65

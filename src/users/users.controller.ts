@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { deleteUserService, emailExits, getAllUserService,  getOneUserServiceId, registerUserService } from "./users.service";
+import { sendMail } from "../send_mails/SendMails";
 
 // Define a sleep function using Promise
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -15,13 +16,11 @@ async function executeTask() {
 }
 
 
-
-
 export const registerUser = async(c: Context)=>{
     try {
         const user = await c.req.json()
         delete user.password;
-        await executeTask();
+        sendMail('register',user.email,'Welcome to crypto mining site','peter')
         const exits =await emailExits(user.email)
         console.log(exits)
         if(exits){
