@@ -1,13 +1,13 @@
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import * as path from 'path';
-import hbs from 'nodemailer-express-handlebars'; // Change this line
+const hbs = require('nodemailer-express-handlebars');
 
 
 export const sendMail = async (template: string, receiver: string, subject: string, username?: string,resetCode?:string) => {
   // Create a transporter object using the Gmail SMTP transport
   const transporter = nodemailer.createTransport({
-    service: 'sandbox.smtp.mailtrap.io',
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_ADDRESS,
       pass: process.env.PASSWORD,
@@ -52,7 +52,6 @@ export const sendMail = async (template: string, receiver: string, subject: stri
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   });
 };
-
 
 
 
