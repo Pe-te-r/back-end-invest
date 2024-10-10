@@ -1,49 +1,55 @@
 import * as nodemailer from 'nodemailer';
 import 'dotenv/config';
 import * as path from 'path';
-const hbs = require('nodemailer-express-handlebars');
+import * as ejs from 'ejs';
+import * as fs from 'fs';
 
+export const sendMail = async (
+  template: string, 
+  receiver: string, 
+  subject: string, 
+  username?: string,
+  code?: string
 
-export const sendMail = async (template: string, receiver: string, subject: string, username?: string,resetCode?:string) => {
-  // Create a transporter object using the Gmail SMTP transport
+) => {
+  // Create a transporter object using Gmail's SMTP
   const transporter = nodemailer.createTransport({
     service: 'gmail',
+    host: 'smtp.gmail.com',
+    secure: true,
     auth: {
       user: process.env.EMAIL_ADDRESS,
       pass: process.env.PASSWORD,
     },
   });
 
-  const hbsOptions = {
-    viewEngine: {
-      extName: '.handlebars',
-      partialsDir: path.join(__dirname, 'views'),
-      layoutsDir: path.join(__dirname, 'views'),
-      defaultLayout: false,
-    },
-    viewPath: path.join(__dirname, 'views'),
-    extName: '.handlebars',
-  };
+  // Load and render the EJS template
+  let html_code;
+  if(template === 'register'){
 
-  // Debug: Print the resolved viewPath
-  console.log('Resolved viewPath:', path.join(__dirname, 'views'));
-
-  // Attach the handlebars plugin to the nodemailer transporter
-  transporter.use('compile', hbs(hbsOptions));
+    const templatePath = path.join(__dirname, 'views', `${template}.ejs`);
+    html_code = ejs.render(fs.readFileSync(templatePath, 'utf8'), {
+      username: username,
+      
+    });
+  }else if(template === 'code'){
+    const templatePath = path.join(__dirname, 'views', `${template}.ejs`);
+    html_code = ejs.render(fs.readFileSync(templatePath, 'utf8'), {
+      username: username,
+      verificationCode:code
+    });
+    
+  }
 
   // Define email options
   const mailOptions = {
     from: process.env.EMAIL_ADDRESS,
     to: receiver,
     subject: subject,
-    template: template,
-    context: {
-      username: username,
-      resetCode: resetCode
-    }
+    html: html_code, // Use rendered HTML code from EJS
   };
-  
-  // Send email
+
+  // Send the email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       return console.log('Error occurred: ', error.message);
@@ -52,6 +58,3 @@ export const sendMail = async (template: string, receiver: string, subject: stri
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   });
 };
-
-
-

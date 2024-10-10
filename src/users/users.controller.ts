@@ -20,7 +20,7 @@ export const registerUser = async(c: Context)=>{
     try {
         const user = await c.req.json()
         delete user.password;
-        await sendMail('register',user.email,'Welcome to crypto mining site','peter')
+        await sendMail('register',user.email,'Welcome to Peer Mining',`${user.first_name}`)
         const exits =await emailExits(user.email)
         console.log(exits)
         if(exits){

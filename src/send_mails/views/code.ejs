@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Verification Code</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 40px;
+      margin: 50px auto;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #16a085;
+      font-size: 36px;
+      margin: 20px 0;
+    }
+    p {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .highlight {
+      font-size: 18px;
+      color: #3498db;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #999;
+      text-align: center;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 20px;
+      background-color: #3498db;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hello, <%= username %>!</h1>
+
+    <p>
+      We received a request to either verify your account or reset your password. Below is your verification code, which you can use to confirm your identity.
+    </p>
+
+    <h2><%= verificationCode %></h2>
+
+    <p>
+      Please use this code to complete the verification process. If you did not request this code, you can safely ignore this email.
+    </p>
+
+    <p>
+      If you need further assistance or have any questions, feel free to reach out to our support team.
+    </p>
+
+    <a href="#" class="button">Return to Our Site</a>
+
+    <div class="footer">
+      <p>Best regards,<br>The CryptoMiner Team</p>
+    </div>
+  </div>
+</body>
+</html>
