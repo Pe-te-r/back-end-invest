@@ -54,7 +54,6 @@ export const loginUser = async(c: Context)=>{
         const code = generateRandomCode();
         if(exits){
             const user_details: any = await getOneUserServiceEmail(user.email,true)
-            console.log(user_details)
             const isPasswordValid = await bcrypt.compare(String(user.password),String(user_details?.auth.password));
             if(!isPasswordValid){
                 return c.json({'message': 'Invalid password'})
@@ -65,11 +64,11 @@ export const loginUser = async(c: Context)=>{
                     return c.json({'message':'code'})
                 }
             }else if(!user_details?.verified && user.code){
-                if(!await getCode(user.id,user?.code)){
+                if(!await getCode(user_details.id,user?.code)){
                     return c.json({'message':'code is not a valid'})
                 }
             }
-            return c.json(user_details)
+            return c.json({'user':user_details})
         }else{
             return c.json({'message': 'Email not found'})
         }

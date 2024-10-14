@@ -45,7 +45,8 @@ export const setCode= async(id: string,code: string)=>{
 
 export const getCode = async(id:string,code:string)=>{
     const result = await db.select().from(usersTable).where(eq(usersTable.id, id));
-    if(result[0]?.promo_code_owner == code){
+    console.log(result)
+    if(String(result[0].promo_code_owner) == String(code)){
         await db.update(usersTable)
         .set({
             verified: true,
