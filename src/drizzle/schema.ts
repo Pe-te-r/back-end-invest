@@ -3,8 +3,8 @@ import { pgTable, integer, varchar, date, boolean, uuid } from "drizzle-orm/pg-c
 
 export const usersTable = pgTable("users", {
     id: uuid('id').defaultRandom().primaryKey(),
-    first_name: varchar('first_name', { length: 20 }),
-    last_name: varchar('last_name', { length: 20 }),
+    first_Name: varchar('first_Name', { length: 20 }),
+    last_Name: varchar('last_Name', { length: 20 }),
     email: varchar('email', { length: 100 }),
     verified: boolean('verified').default(false),
     invested: boolean('invested').default(false),

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import db from "../drizzle/db"
-import { usersTable } from "../drizzle/schema"
+import { authTable, usersTable } from "../drizzle/schema"
 
 export const registerUserService = async(user: any)=>{
     const id = await db.insert(usersTable).values(user).returning({id: usersTable.id}).execute()
@@ -40,4 +40,9 @@ export const deleteUserService = async(id: string)=>{
     .where(eq(usersTable.id, id))
     .returning({'id':usersTable.id}).execute();
     return result[0] ?? null;
+}
+
+export const store_passwrod = async(user_id:string,password:string) =>{
+    const id = await db.insert(authTable).values({user_id:user_id,password:password}).returning({id: usersTable.id}).execute()
+    return id[0]
 }
