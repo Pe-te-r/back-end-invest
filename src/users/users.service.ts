@@ -58,8 +58,18 @@ export const getCode = async(id:string,code:string)=>{
     return false;
 }
 
-export const getOneUserServiceId = async(id: string,password?:boolean)=>{
-        const result = await db.select().from(usersTable).where(eq(usersTable.id, id));
+export const getOneUserServiceId = async(id: string)=>{
+        // const result = await db.select().from(usersTable).where(eq(usersTable.id, id));
+        const result =await db.query.usersTable.findFirst({
+            where: eq(usersTable.id,id),
+            with:{
+                account:{
+                    columns:{
+                        balance:true
+                    }
+                }
+            }
+        })
         return result?? undefined;
 }
 

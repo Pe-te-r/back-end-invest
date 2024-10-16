@@ -2,6 +2,7 @@ import { Context } from "hono";
 import { deleteUserService, emailExits, getAllUserService,  getCode,  getOneUserServiceEmail,  getOneUserServiceId, registerUserService, setCode, store_passwrod } from "./users.service";
 import { sendMail } from "../send_mails/SendMails";
 import bcrypt from 'bcrypt'; 
+import {  sign} from "hono/jwt"
 
 // Define a sleep function using Promise
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,7 +69,20 @@ export const loginUser = async(c: Context)=>{
                     return c.json({'message':'code is not a valid'})
                 }
             }
-            return c.json({'user':user_details})
+            const payload = {
+                user_id:user_details.id,
+                email:user_details.email,
+                exp:Math.floor(Date.now()/1000)+(60*270)
+              }
+            const secret=process.env.SECRET_KEY as string
+            const token= await sign(payload, secret)
+            // delete user_details.auth
+            const return_user={
+                id:user_details.id,
+                token:token
+            }
+            // user_details.token = token
+            return c.json({'user':return_user})
         }else{
             return c.json({'message': 'Email not found'})
         }
@@ -90,7 +104,8 @@ export const getAllUsers = async(c: Context)=>{
 export const getOneUser = async(c: Context)=>{
     try {
         const id = c.req.param("id")
-        const user = await getOneUserServiceId(id,true)
+        const user = await getOneUserServiceId(id)
+        console.log(user)
         if(!user){
             return c.json({'error':'User not found'})
         }
