@@ -23,20 +23,26 @@ export const accountTable = pgTable('account', {
     balance: integer('balance').default(0),    
 });
 
+// not required
 export const server = pgTable('server',{
     id: uuid('id').defaultRandom().primaryKey(),
     money: varchar('name', { length: 50 }),
 })
 
-export const promoCode = pgTable('promoCode',{
-    user_id: uuid('user_id').references(() => usersTable.id).primaryKey(),
+// promoCode Table
+export const promoCode = pgTable('promoCode', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    user_id: uuid('user_id').references(() => usersTable.id), // Owner of the promo code
     promo_code: varchar('promo_code', { length: 20 }),
-})
+});
 
-export const promoUsers = pgTable('promoUsers',{
-    user_id: uuid('user_id').references(() => usersTable.id).primaryKey(),
-    
-})
+// promoUsers Table
+export const promoUsers = pgTable('promoUsers', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    user_id: uuid('user_id').references(() => usersTable.id), // The user who registered with the promo code
+    promo_code_id: uuid('promo_code_id').references(() => promoCode.id), // Link to promo code used
+});
+
 
 // relationships
 
@@ -46,6 +52,27 @@ export const usersRelations = relations(usersTable, ({ one }) => ({
     promoCode: one(promoCode),
 }));
 
+
+
+export const promoCodeRelations = relations(promoCode, ({ one, many }) => ({
+    owner: one(usersTable, {
+      fields: [promoCode.user_id],
+      references: [usersTable.id],
+    }),
+    users: many(promoUsers),
+  }));
+
+  export const promoUsersRelations = relations(promoUsers, ({ one }) => ({
+    user: one(usersTable, {
+      fields: [promoUsers.user_id],
+      references: [usersTable.id],
+    }),
+    promoCode: one(promoCode, {
+      fields: [promoUsers.promo_code_id],
+      references: [promoCode.id],
+    }),
+  }));
+
 export const authRelations = relations(authTable, ({ one }) => ({
     user: one(usersTable, {
         fields: [authTable.user_id],
@@ -53,12 +80,7 @@ export const authRelations = relations(authTable, ({ one }) => ({
     }),
 }));
 
-export const promoRelations = relations(promoCode,({ one }) => ({
-    user: one(usersTable, {
-        fields: [promoCode.user_id],
-        references: [usersTable.id],
-    }),
-}));
+
 
 export const accountRelations = relations(accountTable, ({ one }) => ({
     user: one(usersTable, {
