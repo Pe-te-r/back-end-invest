@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteUserService, emailExits, getAllUserService,  getCode,  getOneUserServiceEmail,  getOneUserServiceId, registerUserService, setCode, store_passwrod } from "./users.service";
+import { deleteUserService, emailExits, getAllUserService,  getCode,  getOneUserServiceEmail,  getOneUserServiceId, registerUserService, setCode, store_passwrod, storeInvitationCOde } from "./users.service";
 import { sendMail } from "../send_mails/SendMails";
 import bcrypt from 'bcrypt'; 
 import {  sign} from "hono/jwt"
@@ -16,6 +16,21 @@ async function executeTask() {
   
   console.log('Task resumed after 5 seconds');
 }
+
+function generateRandomInvitationCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters[randomIndex];
+    }
+    return code;
+}
+
+// Example usage:
+const randomCode = generateRandomInvitationCode();
+console.log(randomCode); // This will print the generated code to the console
+
 
 // register
 export const registerUser = async(c: Context)=>{
@@ -34,7 +49,9 @@ export const registerUser = async(c: Context)=>{
         // console.log(registeredUser.id)
         const user_id = registeredUser.id
         const pass_id = await store_passwrod(user_id,hashed_password)
-        console.log(pass_id)
+        const randomCode = generateRandomInvitationCode();
+        const results = await storeInvitationCOde(user_id,randomCode)
+        console.log(results)
         await sendMail('register',user.email,'Welcome to Peer Mining',user.first_Name)
         return c.json(pass_id)
     } catch (error: any) {
@@ -105,7 +122,6 @@ export const getOneUser = async(c: Context)=>{
     try {
         const id = c.req.param("id")
         const user = await getOneUserServiceId(id)
-        console.log(user)
         if(!user){
             return c.json({'error':'User not found'})
         }

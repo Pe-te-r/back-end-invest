@@ -1,11 +1,16 @@
 import { eq } from "drizzle-orm"
 import db from "../drizzle/db"
-import { authTable, usersTable } from "../drizzle/schema"
+import { authTable, promoCode, usersTable } from "../drizzle/schema"
 import { NONCE } from "hono/secure-headers"
 
 export const registerUserService = async(user: any)=>{
     const id = await db.insert(usersTable).values(user).returning({id: usersTable.id}).execute()
     return id[0]
+}
+
+export const storeInvitationCOde = async(id:string,code:string)=>{
+    await db.insert(promoCode).values({user_id:id,promo_code:code}).returning({id: usersTable.id}).execute()
+    return true
 }
 
 export const emailExits = async(email: string): Promise<boolean>=>{
@@ -66,6 +71,11 @@ export const getOneUserServiceId = async(id: string)=>{
                 account:{
                     columns:{
                         balance:true
+                    }
+                },
+                promoCode:{
+                    columns:{
+                        promo_code:true
                     }
                 }
             }
