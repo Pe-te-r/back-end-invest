@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import db from "../drizzle/db"
-import { authTable, promoCode, usersTable } from "../drizzle/schema"
+import { authTable, promoCode, promoUsers, usersTable } from "../drizzle/schema"
 import { NONCE } from "hono/secure-headers"
 
 export const registerUserService = async(user: any)=>{
@@ -10,6 +10,16 @@ export const registerUserService = async(user: any)=>{
 
 export const storeInvitationCOde = async(id:string,code:string)=>{
     await db.insert(promoCode).values({user_id:id,promo_code:code}).returning({id: usersTable.id}).execute()
+    return true
+}
+
+export const getCodeId=async(code:string)=>{
+    const result = await db.query.promoCode.findFirst({where: eq(promoCode.promo_code,code)})
+    return result ?? null;
+}
+
+export const saveRegisterCode=async(id:string,code:string)=>{
+    await db.insert(promoUsers).values({user_id:id,promo_code_id:code})
     return true
 }
 
@@ -77,7 +87,18 @@ export const getOneUserServiceId = async(id: string)=>{
                     columns:{
                         promo_code:true
                     }
-                }
+                },
+                usedPromoCodes: {
+                    with: {
+                      user: {
+                        with: {
+                          usedPromoCodes:true
+
+                        }
+                      },
+                    }
+                  }
+
             }
         })
         return result?? undefined;

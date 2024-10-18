@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteUserService, emailExits, getAllUserService,  getCode,  getOneUserServiceEmail,  getOneUserServiceId, registerUserService, setCode, store_passwrod, storeInvitationCOde } from "./users.service";
+import { deleteUserService, emailExits, getAllUserService,  getCode,  getCodeId,  getOneUserServiceEmail,  getOneUserServiceId, registerUserService, saveRegisterCode, setCode, store_passwrod, storeInvitationCOde } from "./users.service";
 import { sendMail } from "../send_mails/SendMails";
 import bcrypt from 'bcrypt'; 
 import {  sign} from "hono/jwt"
@@ -36,6 +36,8 @@ console.log(randomCode); // This will print the generated code to the console
 export const registerUser = async(c: Context)=>{
     try {
         const user = await c.req.json()
+        const register_code = user.register_code
+        delete user.register_code
         const password =  user.password;
         const saltRounds = 10;
         delete user.password;
@@ -50,8 +52,10 @@ export const registerUser = async(c: Context)=>{
         const user_id = registeredUser.id
         const pass_id = await store_passwrod(user_id,hashed_password)
         const randomCode = generateRandomInvitationCode();
-        const results = await storeInvitationCOde(user_id,randomCode)
-        console.log(results)
+        await storeInvitationCOde(user_id,randomCode)
+        const code_id: any                               = await getCodeId(register_code)
+        await saveRegisterCode(user_id,code_id?.id)
+
         await sendMail('register',user.email,'Welcome to Peer Mining',user.first_Name)
         return c.json(pass_id)
     } catch (error: any) {
