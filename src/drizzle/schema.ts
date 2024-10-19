@@ -33,7 +33,7 @@ export const server = pgTable('server',{
 export const promoCode = pgTable('promoCode', {
     id: uuid('id').defaultRandom().primaryKey(),
     user_id: uuid('user_id').references(() => usersTable.id), // Owner of the promo code
-    promo_code: varchar('promo_code', { length: 20 }),
+    promo_code: varchar('promo_code', { length: 20 }).unique(),
 });
 
 // promoUsers Table

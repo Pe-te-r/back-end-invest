@@ -77,6 +77,9 @@ export const getOneUserServiceId = async(id: string)=>{
         // const result = await db.select().from(usersTable).where(eq(usersTable.id, id));
         const result =await db.query.usersTable.findFirst({
             where: eq(usersTable.id,id),
+            columns:{
+                promo_code_owner:false
+            },
             with:{
                 account:{
                     columns:{
@@ -85,19 +88,30 @@ export const getOneUserServiceId = async(id: string)=>{
                 },
                 promoCode:{
                     columns:{
-                        promo_code:true
+                        id:false,
+                        promo_code:false,
+                        user_id:false
+                    },
+                    with:{
+                        users:{
+                            columns:{
+                                id:false,
+                                promo_code_id:false,
+                                user_id:false
+                            },
+                            with:{
+                                user:{
+                                    columns:{
+                                        created_at:true,
+                                        first_Name:true,
+                                        last_Name:true,
+                                    }
+                                },
+                            }
+                        },
                     }
                 },
-                usedPromoCodes: {
-                    with: {
-                      user: {
-                        with: {
-                          usedPromoCodes:true
 
-                        }
-                      },
-                    }
-                  }
 
             }
         })

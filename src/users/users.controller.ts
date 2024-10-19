@@ -20,7 +20,7 @@ async function executeTask() {
 function generateRandomInvitationCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let code = '';
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         code += characters[randomIndex];
     }
@@ -53,7 +53,7 @@ export const registerUser = async(c: Context)=>{
         const pass_id = await store_passwrod(user_id,hashed_password)
         const randomCode = generateRandomInvitationCode();
         await storeInvitationCOde(user_id,randomCode)
-        const code_id: any                               = await getCodeId(register_code)
+        const code_id: any  = await getCodeId(register_code)
         await saveRegisterCode(user_id,code_id?.id)
 
         await sendMail('register',user.email,'Welcome to Peer Mining',user.first_Name)
