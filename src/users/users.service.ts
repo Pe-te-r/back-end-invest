@@ -89,7 +89,7 @@ export const getOneUserServiceId = async(id: string)=>{
                 promoCode:{
                     columns:{
                         id:false,
-                        promo_code:false,
+                        promo_code:true,
                         user_id:false
                     },
                     with:{
@@ -105,6 +105,7 @@ export const getOneUserServiceId = async(id: string)=>{
                                         created_at:true,
                                         first_Name:true,
                                         last_Name:true,
+                                        email:true
                                     }
                                 },
                             }
