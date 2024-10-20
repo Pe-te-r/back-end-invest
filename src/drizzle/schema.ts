@@ -44,6 +44,7 @@ export const promoUsers = pgTable('promoUsers', {
 });
 
 
+
 // relationships
 
 export const usersRelations = relations(usersTable, ({ one,many }) => ({
