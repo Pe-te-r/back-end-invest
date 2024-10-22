@@ -12,9 +12,7 @@ dotenv.config();
 
 const app = new Hono().basePath('/api')
 
-// app.use(logger())  //logs request and response to the console
-// app.use(csrf()) //prevents CSRF attacks by checking request headers.
-// app.use(trimTrailingSlash()) 
+
 
 app.use(cors({
   origin: '*', 
