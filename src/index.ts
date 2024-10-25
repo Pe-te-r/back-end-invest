@@ -2,10 +2,9 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import dotenv from 'dotenv';
 import { usersRoute } from './users/users.route';
-import { csrf } from 'hono/csrf';
-import { logger } from 'hono/logger';
-import { trimTrailingSlash } from 'hono/trailing-slash';
+
 import { cors } from 'hono/cors';
+import { check_ok } from './check/check.route';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -21,11 +20,12 @@ app.use(cors({
 }));
 
 
-app.get('/ok', (c) => {
-  return c.text('The server is running📢😏😏😏!')
-})
+// app.get('/ok', (c) => {
+//   return c.text('The server is running📢😏😏😏!')
+// })
 
 app.route('/',usersRoute)
+app.route('/',check_ok)
 
 const port = Number(process.env.PORT);
 console.log(`Server is running on port ${port}`)

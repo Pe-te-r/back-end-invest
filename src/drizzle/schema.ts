@@ -24,8 +24,8 @@ export const accountTable = pgTable('account', {
 });
 
 // not required
-export const server = pgTable('server',{
-    id: uuid('id').defaultRandom().primaryKey(),
+export const locked_assets = pgTable('locked_assets',{
+    user_id: uuid('user_id').references(() => usersTable.id).primaryKey(),
     money: varchar('name', { length: 50 }),
 })
 
@@ -42,6 +42,7 @@ export const promoUsers = pgTable('promoUsers', {
     user_id: uuid('user_id').references(() => usersTable.id), // The user who registered with the promo code
     promo_code_id: uuid('promo_code_id').references(() => promoCode.id), // Link to promo code used
 });
+
 
 
 

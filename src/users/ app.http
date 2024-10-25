@@ -12,6 +12,9 @@ Content-Type: application/application/json
 ### all users
 GET  http://localhost:3000/api/users
 
+###
+GET  http://localhost:3000/api/ok
+
 
 ### one users
 GET http://localhost:3000/api/users/646b1fd1-b04e-4729-9a05-51d8cc28023e
