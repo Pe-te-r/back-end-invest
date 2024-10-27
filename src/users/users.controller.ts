@@ -3,6 +3,7 @@ import { deleteUserService, emailExits, getAllUserService,  getCode,  getCodeId,
 import { sendMail } from "../send_mails/SendMails";
 import bcrypt from 'bcrypt'; 
 import {  sign} from "hono/jwt"
+import { configDotenv } from "dotenv";
 
 // Define a sleep function using Promise
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -125,6 +126,8 @@ export const getAllUsers = async(c: Context)=>{
 export const getOneUser = async(c: Context)=>{
     try {
         const id = c.req.param("id")
+        console.log(id)
+        console.log('above  ')
         const user = await getOneUserServiceId(id)
         if(!user){
             return c.json({'error':'User not found'})

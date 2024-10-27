@@ -5,6 +5,7 @@ import { usersRoute } from './users/users.route';
 
 import { cors } from 'hono/cors';
 import { check_ok } from './check/check.route';
+import { book_server } from './book_server/book_server.route';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(cors({
 
 app.route('/',usersRoute)
 app.route('/',check_ok)
+app.route('/',book_server)
 
 const port = Number(process.env.PORT);
 console.log(`Server is running on port ${port}`)

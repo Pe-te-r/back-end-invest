@@ -112,6 +112,12 @@ export const getOneUserServiceId = async(id: string)=>{
                         },
                     }
                 },
+                server_hires:{
+                    columns:{
+                        id:false,
+                        user_id:false, 
+                    }
+                },
 
 
             }

@@ -29,6 +29,19 @@ export const locked_assets = pgTable('locked_assets',{
     money: varchar('name', { length: 50 }),
 })
 
+// server
+export const server_hire= pgTable('server_hire',{
+    id: uuid('id').defaultRandom().primaryKey(),
+    days_hired : integer('days_hired').notNull(),
+    start_date : date('start_date').defaultNow(),
+    day_rate: integer('day_rate').notNull(),
+    day_minining: integer('day_minining').notNull(),
+    end_date : date('end_date'),
+    user_id: uuid('user_id').references(() => usersTable.id), // The user who hired the server
+    server_id: integer('server_id'), // The server hired
+
+})
+
 // promoCode Table
 export const promoCode = pgTable('promoCode', {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -53,8 +66,16 @@ export const usersRelations = relations(usersTable, ({ one,many }) => ({
     account: one(accountTable),
     promoCode: one(promoCode),
     usedPromoCodes: many(promoUsers),
+    server_hires: many(server_hire),
+  
 }));
 
+export const serverHigher = relations(server_hire,({one})=>({
+    server_hired:one(usersTable,{
+        fields: [server_hire.user_id],
+        references: [usersTable.id],
+    })
+}))
 
 
 export const promoCodeRelations = relations(promoCode, ({ one, many }) => ({
