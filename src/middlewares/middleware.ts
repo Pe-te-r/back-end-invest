@@ -22,8 +22,8 @@ export const authMiddleware = async (c: Context, next: Next, role: string) => {
 };
 
 export const allMiddleware = async (c: Context, next: Next) => {
-  console.log('here')
   const token = c.req.header("Authorization");
+  console.log('here')
   if (!token) return c.json({ error: "no token" }, 401);
   const decoded = await verifyToken(token, process.env.SECRET_KEY as string);
   if (!decoded) return c.json({ error: 'expired' });
